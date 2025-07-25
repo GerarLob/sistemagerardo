@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from decouple import config  # NUEVO
 
 # BASE_DIR
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -18,8 +19,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    #apps personalizadas 
-    'usuarios', 
+    # apps personalizadas
+    'usuarios',
 ]
 
 # MIDDLEWARE
@@ -87,8 +88,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # LOGIN / LOGOUT
 LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/bienvenida/'
 LOGOUT_REDIRECT_URL = '/login/'
 
 # MODELO DE USUARIO PERSONALIZADO
 AUTH_USER_MODEL = 'usuarios.Usuario'
+
+# ✅ CONFIGURACIÓN DE EMAIL (para recuperación de contraseña)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
