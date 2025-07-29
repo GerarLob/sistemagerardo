@@ -1,0 +1,248 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% block title %}Dashboard - OFICONT{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">
+            <i class="bi bi-speedometer2"></i> Dashboard
+            <small class="text-muted">Panel de Control</small>
+        </h2>
+    </div>
+</div>
+
+<!-- Estadísticas Principales -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="stats-card">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h3 class="mb-0">{{ total_clientes }}</h3>
+                    <p class="mb-0">Clientes Activos</p>
+                </div>
+                <i class="bi bi-people" style="font-size: 2rem;"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stats-card success">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h3 class="mb-0">Q{{ ingresos_mes|floatformat:2 }}</h3>
+                    <p class="mb-0">Ingresos del Mes</p>
+                </div>
+                <i class="bi bi-arrow-up-circle" style="font-size: 2rem;"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stats-card warning">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h3 class="mb-0">Q{{ gastos_mes|floatformat:2 }}</h3>
+                    <p class="mb-0">Gastos del Mes</p>
+                </div>
+                <i class="bi bi-arrow-down-circle" style="font-size: 2rem;"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stats-card {% if balance_mes >= 0 %}success{% else %}danger{% endif %}">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h3 class="mb-0">Q{{ balance_mes|floatformat:2 }}</h3>
+                    <p class="mb-0">Balance del Mes</p>
+                </div>
+                <i class="bi bi-calculator" style="font-size: 2rem;"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Acciones Rápidas -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-lightning"></i> Acciones Rápidas</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-2">
+                        <a href="{% url 'dashboard:cliente_crear' %}" class="btn btn-primary w-100">
+                            <i class="bi bi-person-plus"></i> Nuevo Cliente
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{% url 'dashboard:transaccion_crear' %}" class="btn btn-success w-100">
+                            <i class="bi bi-plus-circle"></i> Nueva Transacción
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{% url 'dashboard:reporte_generar' %}" class="btn btn-info w-100">
+                            <i class="bi bi-file-earmark-text"></i> Generar Reporte
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{% url 'dashboard:configuracion_sistema' %}" class="btn btn-secondary w-100">
+                            <i class="bi bi-gear"></i> Configuración
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Transacciones Recientes -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-clock-history"></i> Transacciones Recientes
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if transacciones_recientes %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Cliente</th>
+                                    <th>Tipo</th>
+                                    <th>Monto</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for transaccion in transacciones_recientes %}
+                                <tr>
+                                    <td>{{ transaccion.cliente.nombre|truncatechars:20 }}</td>
+                                    <td>
+                                        <span class="badge {% if transaccion.tipo_transaccion == 'ingreso' %}bg-success{% else %}bg-warning{% endif %}">
+                                            {{ transaccion.get_tipo_transaccion_display }}
+                                        </span>
+                                    </td>
+                                    <td>Q{{ transaccion.monto|floatformat:2 }}</td>
+                                    <td>{{ transaccion.fecha_transaccion|date:"d/m/Y" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="{% url 'dashboard:transacciones_lista' %}" class="btn btn-outline-primary btn-sm">
+                            Ver Todas las Transacciones
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="bi bi-inbox" style="font-size: 3rem; color: #ccc;"></i>
+                        <p class="text-muted mt-2">No hay transacciones recientes</p>
+                        <a href="{% url 'dashboard:transaccion_crear' %}" class="btn btn-primary btn-sm">
+                            Crear Primera Transacción
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Clientes Recientes -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-people"></i> Clientes Recientes
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if clientes_recientes %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Tipo</th>
+                                    <th>NIT</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cliente in clientes_recientes %}
+                                <tr>
+                                    <td>{{ cliente.nombre|truncatechars:20 }}</td>
+                                    <td>
+                                        <span class="badge bg-info">
+                                            {{ cliente.get_tipo_cliente_display }}
+                                        </span>
+                                    </td>
+                                    <td>{{ cliente.nit }}</td>
+                                    <td>
+                                        <span class="badge {% if cliente.activo %}bg-success{% else %}bg-danger{% endif %}">
+                                            {% if cliente.activo %}Activo{% else %}Inactivo{% endif %}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="{% url 'dashboard:clientes_lista' %}" class="btn btn-outline-primary btn-sm">
+                            Ver Todos los Clientes
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="bi bi-people" style="font-size: 3rem; color: #ccc;"></i>
+                        <p class="text-muted mt-2">No hay clientes registrados</p>
+                        <a href="{% url 'dashboard:cliente_crear' %}" class="btn btn-primary btn-sm">
+                            Registrar Primer Cliente
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Información del Sistema -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-info-circle"></i> Información del Sistema
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="bi bi-calendar-check" style="font-size: 2rem; color: var(--secondary-color);"></i>
+                            <h6 class="mt-2">Mes Actual</h6>
+                            <p class="text-muted">{{ mes_actual }}/{{ ano_actual }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="bi bi-cash-coin" style="font-size: 2rem; color: var(--success-color);"></i>
+                            <h6 class="mt-2">Total Transacciones</h6>
+                            <p class="text-muted">{{ total_transacciones }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="bi bi-person-check" style="font-size: 2rem; color: var(--warning-color);"></i>
+                            <h6 class="mt-2">Usuario Actual</h6>
+                            <p class="text-muted">{{ user.get_full_name|default:user.username }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

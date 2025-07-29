@@ -1,12 +1,22 @@
 from django.contrib import admin
-from django.urls import path
-from usuarios.views import CustomLoginView, bienvenida
+from django.urls import path, include
+from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
+from usuarios.views import CustomLoginView
 from django.contrib.auth.views import LogoutView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
+
+def home_redirect(request):
+    """Redirige a dashboard si está autenticado, sino al login"""
+    if request.user.is_authenticated:
+        return redirect('dashboard:dashboard_home')
+    else:
+        return redirect('login')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', CustomLoginView.as_view(), name='login'),  # CAMBIADO: ahora la raíz va al login
-    path('bienvenida/', bienvenida, name='bienvenida'),
+    path('', home_redirect, name='home'),  # Redirige según autenticación
+    path('login/', CustomLoginView.as_view(), name='login'),
+    path('dashboard/', include('dashboard.urls')),  # Dashboard del sistema contable
     path('logout/', LogoutView.as_view(), name='logout'),
 
     # Rutas de restablecimiento de contraseña

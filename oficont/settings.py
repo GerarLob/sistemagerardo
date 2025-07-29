@@ -21,6 +21,7 @@ INSTALLED_APPS = [
 
     # apps personalizadas
     'usuarios',
+    'dashboard',
 ]
 
 # MIDDLEWARE
@@ -88,7 +89,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # LOGIN / LOGOUT
 LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/bienvenida/'
+LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/login/'
 
 # MODELO DE USUARIO PERSONALIZADO
