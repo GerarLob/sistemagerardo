@@ -6,11 +6,8 @@ from usuarios.views import CustomLoginView
 from django.contrib.auth.views import LogoutView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 
 def home_redirect(request):
-    """Redirige a dashboard si está autenticado, sino al login"""
-    if request.user.is_authenticated:
-        return redirect('dashboard:dashboard_home')
-    else:
-        return redirect('login')
+    """Redirige siempre al login primero"""
+    return redirect('login')
 
 def dashboard_redirect(request):
     """Redirige al dashboard solo si está autenticado"""
