@@ -12,12 +12,19 @@ def home_redirect(request):
     else:
         return redirect('login')
 
+def dashboard_redirect(request):
+    """Redirige al dashboard solo si está autenticado"""
+    if request.user.is_authenticated:
+        return redirect('dashboard:dashboard_home')
+    else:
+        return redirect('login')
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_redirect, name='home'),  # Redirige según autenticación
     path('login/', CustomLoginView.as_view(), name='login'),
     path('dashboard/', include('dashboard.urls')),  # Dashboard del sistema contable
-    path('logout/', LogoutView.as_view(), name='logout'),
+    path('logout/', LogoutView.as_view(next_page='login', http_method_names=['get', 'post']), name='logout'),
 
     # Rutas de restablecimiento de contraseña
     path('password_reset/', PasswordResetView.as_view(), name='password_reset'),

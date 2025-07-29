@@ -1,0 +1,97 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% block title %}Configuración - OFICONT{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">
+            <i class="bi bi-gear"></i> Configuración
+            <small class="text-muted">Configuración del Sistema</small>
+        </h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Configuración de la Oficina</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="nombre_oficina" class="form-label">Nombre de la Oficina</label>
+                            <input type="text" class="form-control" id="nombre_oficina" name="nombre_oficina" 
+                                   value="{{ config.nombre_oficina|default:'' }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="telefono_oficina" class="form-label">Teléfono</label>
+                            <input type="tel" class="form-control" id="telefono_oficina" name="telefono_oficina" 
+                                   value="{{ config.telefono_oficina|default:'' }}">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="direccion_oficina" class="form-label">Dirección</label>
+                        <textarea class="form-control" id="direccion_oficina" name="direccion_oficina" rows="3">{{ config.direccion_oficina|default:'' }}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email_oficina" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email_oficina" name="email_oficina" 
+                               value="{{ config.email_oficina|default:'' }}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle"></i> Guardar Configuración
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Información del Sistema</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <h6>Versión del Sistema</h6>
+                    <p class="text-muted">OFICONT v1.0</p>
+                </div>
+                <div class="mb-3">
+                    <h6>Base de Datos</h6>
+                    <p class="text-muted">SQLite</p>
+                </div>
+                <div class="mb-3">
+                    <h6>Framework</h6>
+                    <p class="text-muted">Django 5.0.7</p>
+                </div>
+                <div class="mb-3">
+                    <h6>Usuario Actual</h6>
+                    <p class="text-muted">{{ user.get_full_name|default:user.username }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="mb-0">Acciones del Sistema</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-warning btn-sm">
+                        <i class="bi bi-arrow-clockwise"></i> Respaldar Base de Datos
+                    </button>
+                    <button class="btn btn-outline-info btn-sm">
+                        <i class="bi bi-download"></i> Exportar Datos
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-gear"></i> Configuración Avanzada
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

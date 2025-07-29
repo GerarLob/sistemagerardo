@@ -1,0 +1,74 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% block title %}Reportes - OFICONT{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">
+            <i class="bi bi-file-earmark-text"></i> Reportes
+            <small class="text-muted">Gestión de Reportes</small>
+        </h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Reportes Generados</h5>
+                <a href="{% url 'dashboard:reporte_generar' %}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Generar Nuevo Reporte
+                </a>
+            </div>
+            <div class="card-body">
+                {% if reportes %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Cliente</th>
+                                    <th>Tipo de Reporte</th>
+                                    <th>Fecha Inicio</th>
+                                    <th>Fecha Fin</th>
+                                    <th>Generado Por</th>
+                                    <th>Fecha Generado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for reporte in reportes %}
+                                <tr>
+                                    <td>{{ reporte.cliente.nombre }}</td>
+                                    <td>
+                                        <span class="badge bg-info">
+                                            {{ reporte.get_tipo_reporte_display }}
+                                        </span>
+                                    </td>
+                                    <td>{{ reporte.fecha_inicio|date:"d/m/Y" }}</td>
+                                    <td>{{ reporte.fecha_fin|date:"d/m/Y" }}</td>
+                                    <td>{{ reporte.generado_por.username }}</td>
+                                    <td>{{ reporte.fecha_generado|date:"d/m/Y H:i" }}</td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-download"></i> Descargar
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="bi bi-file-earmark-text" style="font-size: 3rem; color: #ccc;"></i>
+                        <p class="text-muted mt-2">No hay reportes generados</p>
+                        <a href="{% url 'dashboard:reporte_generar' %}" class="btn btn-primary">
+                            Generar Primer Reporte
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

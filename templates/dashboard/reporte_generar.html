@@ -1,0 +1,98 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% block title %}Generar Reporte - OFICONT{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">
+            <i class="bi bi-file-earmark-plus"></i> Generar Reporte
+            <small class="text-muted">Crear Nuevo Reporte</small>
+        </h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Configuración del Reporte</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="cliente" class="form-label">Cliente</label>
+                            <select class="form-select" id="cliente" name="cliente" required>
+                                <option value="">Seleccionar cliente...</option>
+                                {% for cliente in clientes %}
+                                    <option value="{{ cliente.id }}">{{ cliente.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="tipo_reporte" class="form-label">Tipo de Reporte</label>
+                            <select class="form-select" id="tipo_reporte" name="tipo_reporte" required>
+                                <option value="">Seleccionar tipo...</option>
+                                <option value="balance_general">Balance General</option>
+                                <option value="estado_resultados">Estado de Resultados</option>
+                                <option value="flujo_efectivo">Flujo de Efectivo</option>
+                                <option value="transacciones">Transacciones</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="fecha_inicio" class="form-label">Fecha de Inicio</label>
+                            <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="fecha_fin" class="form-label">Fecha de Fin</label>
+                            <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción (Opcional)</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" rows="3" 
+                                  placeholder="Descripción adicional del reporte..."></textarea>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-file-earmark-text"></i> Generar Reporte
+                        </button>
+                        <a href="{% url 'dashboard:reportes_lista' %}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Volver
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Tipos de Reporte</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <h6><i class="bi bi-calculator text-primary"></i> Balance General</h6>
+                    <small class="text-muted">Muestra activos, pasivos y patrimonio</small>
+                </div>
+                <div class="mb-3">
+                    <h6><i class="bi bi-graph-up text-success"></i> Estado de Resultados</h6>
+                    <small class="text-muted">Ingresos, gastos y utilidad neta</small>
+                </div>
+                <div class="mb-3">
+                    <h6><i class="bi bi-cash-coin text-warning"></i> Flujo de Efectivo</h6>
+                    <small class="text-muted">Movimientos de efectivo por período</small>
+                </div>
+                <div class="mb-3">
+                    <h6><i class="bi bi-list-ul text-info"></i> Transacciones</h6>
+                    <small class="text-muted">Lista detallada de transacciones</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
