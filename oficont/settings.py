@@ -21,6 +21,7 @@ INSTALLED_APPS = [
 
     # apps personalizadas
     'usuarios',
+    'dashboard',
 ]
 
 # MIDDLEWARE

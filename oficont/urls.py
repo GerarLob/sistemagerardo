@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from usuarios.views import CustomLoginView, bienvenida
 from django.contrib.auth.views import LogoutView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 
@@ -7,6 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', CustomLoginView.as_view(), name='login'),  # CAMBIADO: ahora la raíz va al login
     path('bienvenida/', bienvenida, name='bienvenida'),
+    path('dashboard/', include('dashboard.urls')),  # Dashboard del sistema contable
     path('logout/', LogoutView.as_view(), name='logout'),
 
     # Rutas de restablecimiento de contraseña

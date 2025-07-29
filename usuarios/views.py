@@ -7,4 +7,4 @@ class CustomLoginView(LoginView):
 
 @login_required
 def bienvenida(request):
-    return render(request, 'usuarios/bienvenida.html')
+    return redirect('dashboard:dashboard_home')
